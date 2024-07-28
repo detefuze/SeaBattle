@@ -8,7 +8,7 @@ public class Game extends JFrame {
     public Game() {
         setTitle("Sea Battle");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(515, 1180);
+        setSize(1180, 515);
         setLocationRelativeTo(null);
 
         Field field = new Field();
