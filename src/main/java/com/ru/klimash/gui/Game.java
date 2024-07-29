@@ -1,9 +1,18 @@
 package com.ru.klimash.gui;
 
+import com.ru.klimash.model.Ship;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Game extends JFrame {
+
+    private ArrayList<Ship> ships_player1;
+    private ArrayList<Ship> ships_player2;
+
+    private static final int NUMBER_OF_SHIPS = 10;
+
 
     public Game() {
         setTitle("Sea Battle");
@@ -14,73 +23,148 @@ public class Game extends JFrame {
         Field field = new Field();
         add(field, BorderLayout.CENTER);
 
+        ships_player1 = new ArrayList<>();
+        ships_player2 = new ArrayList<>();
+
+
         // Игрок 1
 
         // однопалубные
-        field.placeShip_player1(0, 0);
-        field.placeShip_player1(9, 6);
-        field.placeShip_player1(1, 8);
-        field.placeShip_player1(3, 9);
+        ships_player1.add(new Ship(1, new ArrayList<Point>(){{
+            add(new Point(0, 0));
+        }}, false));
+
+        ships_player1.add(new Ship(1, new ArrayList<Point>(){{
+            add(new Point(9, 6));
+        }}, false));
+
+        ships_player1.add(new Ship(1, new ArrayList<Point>(){{
+            add(new Point(1, 8));
+        }}, false));
+
+        ships_player1.add(new Ship(1, new ArrayList<Point>(){{
+            add(new Point(3, 9));
+        }}, false));
+
+
 
         // двухпалубные
-        field.placeShip_player1(1, 2);
-        field.placeShip_player1(2, 2);
+        ships_player1.add(new Ship(2, new ArrayList<Point>(){{
+            add(new Point(1, 2));
+            add(new Point(2, 2));
+        }}, false));
 
-        field.placeShip_player1(1, 4);
-        field.placeShip_player1(2, 4);
+        ships_player1.add(new Ship(2, new ArrayList<Point>(){{
+            add(new Point(1, 4));
+            add(new Point(2, 4));
+        }}, false));
 
-        field.placeShip_player1(1, 6);
-        field.placeShip_player1(2, 6);
+        ships_player1.add(new Ship(2, new ArrayList<Point>(){{
+            add(new Point(1, 6));
+            add(new Point(2, 6));
+        }}, false));
+
+
 
         // трехпалубные
-        field.placeShip_player1(5, 4);
-        field.placeShip_player1(5, 5);
-        field.placeShip_player1(5, 6);
+        ships_player1.add(new Ship(3, new ArrayList<Point>(){{
+            add(new Point(5, 4));
+            add(new Point(5, 5));
+            add(new Point(5, 6));
+        }}, true));
 
-        field.placeShip_player1(7, 8);
-        field.placeShip_player1(8, 8);
-        field.placeShip_player1(9, 8);
+        ships_player1.add(new Ship(3, new ArrayList<Point>(){{
+            add(new Point(7, 8));
+            add(new Point(8, 8));
+            add(new Point(9, 8));
+        }}, false));
+
+
+
 
         // четырехпалубные
+        ships_player1.add(new Ship(4, new ArrayList<Point>(){{
+            add(new Point(6, 1));
+            add(new Point(7, 1));
+            add(new Point(8, 1));
+            add(new Point(9, 1));
+        }}, false));
 
-        field.placeShip_player1(6, 1);
-        field.placeShip_player1(7, 1);
-        field.placeShip_player1(8, 1);
-        field.placeShip_player1(9, 1);
 
         // Игрок 2
 
         // однопалубные
-        field.placeShip_player2(0, 0);
-        field.placeShip_player2(9, 6);
-        field.placeShip_player2(1, 8);
-        field.placeShip_player2(3, 9);
+        ships_player2.add(new Ship(1, new ArrayList<Point>(){{
+            add(new Point(0, 0));
+        }}, false));
+
+        ships_player2.add(new Ship(1, new ArrayList<Point>(){{
+            add(new Point(9, 6));
+        }}, false));
+
+        ships_player2.add(new Ship(1, new ArrayList<Point>(){{
+            add(new Point(1, 8));
+        }}, false));
+
+        ships_player2.add(new Ship(1, new ArrayList<Point>(){{
+            add(new Point(3, 9));
+        }}, false));
+
+
 
         // двухпалубные
-        field.placeShip_player2(1, 2);
-        field.placeShip_player2(2, 2);
+        ships_player2.add(new Ship(2, new ArrayList<Point>(){{
+            add(new Point(1, 2));
+            add(new Point(2, 2));
+        }}, false));
 
-        field.placeShip_player2(1, 4);
-        field.placeShip_player2(2, 4);
+        ships_player2.add(new Ship(2, new ArrayList<Point>(){{
+            add(new Point(1, 4));
+            add(new Point(2, 4));
+        }}, false));
 
-        field.placeShip_player2(1, 6);
-        field.placeShip_player2(2, 6);
+        ships_player2.add(new Ship(2, new ArrayList<Point>(){{
+            add(new Point(1, 6));
+            add(new Point(2, 6));
+        }}, false));
+
+
 
         // трехпалубные
-        field.placeShip_player2(5, 4);
-        field.placeShip_player2(5, 5);
-        field.placeShip_player2(5, 6);
+        ships_player2.add(new Ship(3, new ArrayList<Point>(){{
+            add(new Point(5, 4));
+            add(new Point(5, 5));
+            add(new Point(5, 6));
+        }}, true));
 
-        field.placeShip_player2(7, 8);
-        field.placeShip_player2(8, 8);
-        field.placeShip_player2(9, 8);
+        ships_player2.add(new Ship(3, new ArrayList<Point>(){{
+            add(new Point(7, 8));
+            add(new Point(8, 8));
+            add(new Point(9, 8));
+        }}, false));
+
+
 
         // четырехпалубные
+        ships_player2.add(new Ship(4, new ArrayList<Point>(){{
+            add(new Point(6, 1));
+            add(new Point(7, 1));
+            add(new Point(8, 1));
+            add(new Point(9, 1));
+        }}, false));
 
-        field.placeShip_player2(6, 1);
-        field.placeShip_player2(7, 1);
-        field.placeShip_player2(8, 1);
-        field.placeShip_player2(9, 1);
+
+        // Рисуем корабли
+        for (int i = 0; i < NUMBER_OF_SHIPS; i++) {
+
+            for (Point p : ships_player1.get(i).cells)
+                field.placeShip_player1(p.x, p.y);
+
+            for (Point p : ships_player2.get(i).cells)
+                field.placeShip_player2(p.x, p.y);
+        }
+
+
 
         setVisible(true);
     }
