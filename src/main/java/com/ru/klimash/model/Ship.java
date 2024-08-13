@@ -1,21 +1,21 @@
 package com.ru.klimash.model;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Ship {
 
-    private int length;
-    public ArrayList<Point> cells;
+    private int length; //
+    public List<Point> cells;
     private boolean isVertical;
 
-    public Ship(int length, ArrayList<Point> cells, boolean isVertical) {
+    public Ship(int length, List<Point> cells, boolean isVertical) {
         this.length = length;
         this.cells = cells;
         this.isVertical = isVertical;
     }
 
-    public ArrayList<Point> getCells() {
+    public List<Point> getCells() {
         return cells;
     }
 

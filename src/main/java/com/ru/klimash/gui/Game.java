@@ -5,11 +5,12 @@ import com.ru.klimash.model.Ship;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Game extends JFrame {
 
-    private ArrayList<Ship> ships_player1;
-    private ArrayList<Ship> ships_player2;
+    private List<Ship> ships_player1;
+    private List<Ship> ships_player2;
 
     private static final int NUMBER_OF_SHIPS = 10;
 
