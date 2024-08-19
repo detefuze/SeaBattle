@@ -1,29 +1,28 @@
 package com.ru.klimash.gui;
 
+import com.ru.klimash.model.Controller;
+import com.ru.klimash.model.GameManager;
+import com.ru.klimash.model.Ship;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.*;
 
 public class Field extends JPanel {
+    private Controller controller;
+
+    private GameManager manager = new GameManager();
 
     private static final int FIELD_SIZE = 10;
-    private int[][] field_player1;
-
-    private int[][] field_player2;
-
-    private Set<Point> selectedCells = new HashSet<>();
-
 
     public Field() {
-        field_player1 = new int[FIELD_SIZE][FIELD_SIZE];
-        field_player2 = new int[FIELD_SIZE+12][FIELD_SIZE];
+        controller = new Controller(this);
+        controller.setFieldPlayer1(new int[FIELD_SIZE][FIELD_SIZE]);
+        controller.setFieldPlayer2(new int[FIELD_SIZE+12][FIELD_SIZE]);
 
         for (int i = 0; i < FIELD_SIZE; i++){
             for (int j = 0; j < FIELD_SIZE; j++)
             {
-                field_player1[i][j] = 0; // 0 - пустая ячейка, 1 - занята кораблем
+                Controller.getFieldPlayer1()[i][j] = 0; // 0 - пустая ячейка, 1 - занята кораблем
                 // 2 - попадание
             }
         }
@@ -31,64 +30,63 @@ public class Field extends JPanel {
         for (int i = 12; i < FIELD_SIZE+12; i++){
             for (int j = 0; j < FIELD_SIZE; j++)
             {
-                field_player2[i][j] = 0; // 0 - пустая ячейка, 1 - занята кораблем
+                Controller.getFieldPlayer2()[i][j] = 0; // 0 - пустая ячейка, 1 - занята кораблем
                 // 2 - попадание
             }
         }
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                int x = e.getX() / 40;
-                int y = e.getY() / 40;
-
-                if (!(x < FIELD_SIZE+2 && x >= FIELD_SIZE && y >= 0 && y < FIELD_SIZE)) {
-                    toggleSelectedCell(x, y);
-                    repaint();
-                }
-            }
-        });
-    }
-
-    private void toggleSelectedCell(int x, int y) {
-        Point cell = new Point(x, y);
-        selectedCells.add(cell);
     }
 
     private void drawSelectedCells(Graphics g) {
-        g.setColor(Color.BLACK);
-        for (Point cell : selectedCells) {
+        for (Point cell : controller.getSelectedCells()) {
             int x = (int) cell.getX() * 40;
             int y = (int) cell.getY() * 40;
             if (cell.x >= 0 && cell.x < FIELD_SIZE && cell.y >= 0 && cell.y < FIELD_SIZE) {
-                if (field_player1[cell.x][cell.y] == 1 || field_player1[cell.x][cell.y] == 2) {
-                    field_player1[cell.x][cell.y] = 2;
+                if (Controller.getFieldPlayer1()[cell.x][cell.y] == 1 || Controller.getFieldPlayer1()[cell.x][cell.y] == 2) {
+                    if (Controller.getFieldPlayer1()[cell.x][cell.y] == 1) {
+                        Controller.getFieldPlayer1()[cell.x][cell.y] = 2;
+                        manager.isDeadPlayer1Ship(Ship.getShipByCoordinates(Game.getShipsPlayer1(), new Point(x / 40, y / 40)));
+                    } else {
+                        Controller.getFieldPlayer1()[cell.x][cell.y] = 2;
+                    }
+                    g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
+                    g.fillRect(x, y, 40, 40);
                     g.setColor(Color.RED);
                     g.fillOval(x, y, 40, 40);
+                    g.setColor(Color.BLACK);
+                    g.drawLine(x + 10, y + 10, x + 30, y + 30);
+                    g.drawLine(x + 10, y + 30, x + 30, y + 10);
                 } else {
                     g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
                     g.fillRect(x, y, 40, 40);
+                    g.setColor(Color.BLACK);
+                    g.fillRect(x + 15, y + 15, 10, 10);
                 }
-                g.setColor(Color.BLACK);
-                g.drawLine(x + 10, y + 10, x + 30, y + 30);
-                g.drawLine(x + 10, y + 30, x + 30, y + 10);
             } else {
-                if (field_player2[cell.x][cell.y] == 1 || field_player2[cell.x][cell.y] == 2) {
-                    field_player2[cell.x][cell.y] = 2;
+                if (Controller.getFieldPlayer2()[cell.x][cell.y] == 1 || Controller.getFieldPlayer2()[cell.x][cell.y] == 2) {
+                    if (Controller.getFieldPlayer2()[cell.x][cell.y] == 1) {
+                        Controller.getFieldPlayer2()[cell.x][cell.y] = 2;
+                        manager.isDeadPlayer2Ship(Ship.getShipByCoordinates(Game.getShipsPlayer2(), new Point(x / 40, y / 40)));
+                    } else {
+                        Controller.getFieldPlayer2()[cell.x][cell.y] = 2;
+                    }
+                    g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
+                    g.fillRect(x, y, 40, 40);
                     g.setColor(Color.RED);
                     g.fillOval(x, y, 40, 40);
+                    g.setColor(Color.BLACK);
+                    g.drawLine(x + 10, y + 10, x + 30, y + 30);
+                    g.drawLine(x + 10, y + 30, x + 30, y + 10);
                 } else {
                     g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
                     g.fillRect(x, y, 40, 40);
+                    g.setColor(Color.BLACK);
+                    g.fillRect(x + 15, y + 15, 10, 10);
                 }
-                g.setColor(Color.BLACK);
-                g.drawLine(x + 10, y + 10, x + 30, y + 30);
-                g.drawLine(x + 10, y + 30, x + 30, y + 10);
             }
         }
     }
 
-    private void drawField_player1(Graphics g) {
+    private void drawFieldPlayer1(Graphics g) {
         g.setColor(Color.BLUE.brighter());
         for (int i = 0; i < FIELD_SIZE; i++){
             for (int j = 0; j < FIELD_SIZE; j++)
@@ -98,7 +96,7 @@ public class Field extends JPanel {
         }
     }
 
-    private void drawField_player2(Graphics g) {
+    private void drawFieldPlayer2(Graphics g) {
         g.setColor(Color.BLUE.brighter());
         for (int i = 12; i < FIELD_SIZE+12; i++){
             for (int j = 0; j < FIELD_SIZE; j++)
@@ -114,32 +112,32 @@ public class Field extends JPanel {
     }
 
     void placeShip_player1(int x, int y) {
-        field_player1[x][y] = 1;
+        Controller.getFieldPlayer1()[x][y] = 1;
         repaint();
     }
 
     void placeShip_player2(int x, int y) {
-        field_player2[x+12][y] = 1;
+        Controller.getFieldPlayer2()[x][y] = 1;
         repaint();
     }
 
-    private void drawShips_player1(Graphics g) {
+    private void drawShipsPlayer1(Graphics g) {
         g.setColor(Color.ORANGE);
         for (int i = 0; i < FIELD_SIZE; i++){
             for (int j = 0; j < FIELD_SIZE; j++)
             {
-                if (field_player1[i][j] == 1)
+                if (Controller.getFieldPlayer1()[i][j] == 1)
                     g.fillOval(i * 40, j * 40, 39, 39);
             }
         }
     }
 
-    private void drawShips_player2(Graphics g) {
+    private void drawShipsPlayer2(Graphics g) {
         g.setColor(Color.ORANGE);
         for (int i = 12; i < FIELD_SIZE+12; i++){
             for (int j = 0; j < FIELD_SIZE; j++)
             {
-                if (field_player2[i][j] == 1)
+                if (Controller.getFieldPlayer2()[i][j] == 1)
                     g.fillOval(i * 40, j * 40, 39, 39);
             }
         }
@@ -148,11 +146,15 @@ public class Field extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawField_player1(g);
+        drawFieldPlayer1(g);
         drawBorder(g);
-        drawField_player2(g);
-        drawShips_player1(g);
-        drawShips_player2(g);
+        drawFieldPlayer2(g);
+        drawShipsPlayer1(g);
+        drawShipsPlayer2(g);
         drawSelectedCells(g);
+    }
+
+    public int getFieldSize() {
+        return FIELD_SIZE;
     }
 }
