@@ -23,7 +23,7 @@ public class Field extends JPanel {
             for (int j = 0; j < FIELD_SIZE; j++)
             {
                 Controller.getFieldPlayer1()[i][j] = 0; // 0 - пустая ячейка, 1 - занята кораблем
-                // 2 - попадание
+                // 2 - попадание // 3 - промах или взрыв вокруг корабля
             }
         }
 
@@ -31,7 +31,7 @@ public class Field extends JPanel {
             for (int j = 0; j < FIELD_SIZE; j++)
             {
                 Controller.getFieldPlayer2()[i][j] = 0; // 0 - пустая ячейка, 1 - занята кораблем
-                // 2 - попадание
+                // 2 - попадание // 3 - промах или взрыв вокруг корабля
             }
         }
     }
@@ -42,9 +42,13 @@ public class Field extends JPanel {
             int y = (int) cell.getY() * 40;
             if (cell.x >= 0 && cell.x < FIELD_SIZE && cell.y >= 0 && cell.y < FIELD_SIZE) {
                 if (Controller.getFieldPlayer1()[cell.x][cell.y] == 1 || Controller.getFieldPlayer1()[cell.x][cell.y] == 2) {
+                    Ship damagedShip = Ship.getShipByCoordinates(Game.getShipsPlayer1(), new Point(x / 40, y / 40)); // поврежденный корабль
                     if (Controller.getFieldPlayer1()[cell.x][cell.y] == 1) {
                         Controller.getFieldPlayer1()[cell.x][cell.y] = 2;
-                        manager.isDeadPlayer1Ship(Ship.getShipByCoordinates(Game.getShipsPlayer1(), new Point(x / 40, y / 40)));
+                        if (manager.isDeadPlayer1Ship(damagedShip)) { // если корабль подбит
+                            Game.getDefeatedShipsPlayer1().add(damagedShip);
+                            manager.paintAroundDefeatedShipPlayer1(damagedShip, damagedShip.isVertical());
+                        }
                     } else {
                         Controller.getFieldPlayer1()[cell.x][cell.y] = 2;
                     }
@@ -56,16 +60,23 @@ public class Field extends JPanel {
                     g.drawLine(x + 10, y + 10, x + 30, y + 30);
                     g.drawLine(x + 10, y + 30, x + 30, y + 10);
                 } else {
-                    g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
-                    g.fillRect(x, y, 40, 40);
-                    g.setColor(Color.BLACK);
-                    g.fillRect(x + 15, y + 15, 10, 10);
+                    if (!Controller.getExplodedCellsPlayer1().contains(cell)) {
+                        g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
+                        g.fillRect(x, y, 40, 40);
+                        g.setColor(Color.BLACK);
+                        g.fillRect(x + 15, y + 15, 10, 10);
+                    }
+
                 }
-            } else {
+            } else if (cell.x >= FIELD_SIZE+2 && cell.x < FIELD_SIZE+12 && cell.y >= 0 && cell.y < FIELD_SIZE) {
                 if (Controller.getFieldPlayer2()[cell.x][cell.y] == 1 || Controller.getFieldPlayer2()[cell.x][cell.y] == 2) {
+                    Ship damagedShip = Ship.getShipByCoordinates(Game.getShipsPlayer2(), new Point(x / 40, y / 40)); // поврежденный корабль
                     if (Controller.getFieldPlayer2()[cell.x][cell.y] == 1) {
                         Controller.getFieldPlayer2()[cell.x][cell.y] = 2;
-                        manager.isDeadPlayer2Ship(Ship.getShipByCoordinates(Game.getShipsPlayer2(), new Point(x / 40, y / 40)));
+                        if (manager.isDeadPlayer2Ship(damagedShip)) { // если корабль подбит
+                            Game.getDefeatedShipsPlayer2().add(damagedShip);
+                            manager.paintAroundDefeatedShipPlayer2(damagedShip, damagedShip.isVertical());
+                        }
                     } else {
                         Controller.getFieldPlayer2()[cell.x][cell.y] = 2;
                     }
@@ -77,11 +88,36 @@ public class Field extends JPanel {
                     g.drawLine(x + 10, y + 10, x + 30, y + 30);
                     g.drawLine(x + 10, y + 30, x + 30, y + 10);
                 } else {
-                    g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
-                    g.fillRect(x, y, 40, 40);
-                    g.setColor(Color.BLACK);
-                    g.fillRect(x + 15, y + 15, 10, 10);
+                    if (!Controller.getExplodedCellsPlayer2().contains(cell)) {
+                        g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
+                        g.fillRect(x, y, 40, 40);
+                        g.setColor(Color.BLACK);
+                        g.fillRect(x + 15, y + 15, 10, 10);
+                    }
                 }
+            }
+        }
+    }
+
+    private void drawAreaAroundDefeatedShipPlayer1(Graphics g) {
+        if (!Game.getDefeatedShipsPlayer1().isEmpty()) {
+            for (Point cell : Controller.getExplodedCellsPlayer1()) {
+                g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
+                g.fillRect(cell.x*40, cell.y*40, 40, 40);
+                g.setColor(Color.BLACK);
+                g.fillRect(cell.x*40 + 15, cell.y*40 + 15, 10, 10);
+            }
+        }
+    }
+
+    private void drawAreaAroundDefeatedShipPlayer2(Graphics g) {
+        if (!Game.getDefeatedShipsPlayer2().isEmpty()) {
+
+            for (Point cell : Controller.getExplodedCellsPlayer2()) {
+                g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
+                g.fillRect(cell.x*40, cell.y*40, 40, 40);
+                g.setColor(Color.BLACK);
+                g.fillRect(cell.x*40 + 15, cell.y*40 + 15, 10, 10);
             }
         }
     }
@@ -152,9 +188,11 @@ public class Field extends JPanel {
         drawShipsPlayer1(g);
         drawShipsPlayer2(g);
         drawSelectedCells(g);
+        drawAreaAroundDefeatedShipPlayer1(g);
+        drawAreaAroundDefeatedShipPlayer2(g);
     }
 
-    public int getFieldSize() {
+    public static int getFieldSize() {
         return FIELD_SIZE;
     }
 }

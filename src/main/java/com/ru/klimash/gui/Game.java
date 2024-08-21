@@ -11,7 +11,9 @@ import java.util.List;
 public class Game extends JFrame {
 
     private static List<Ship> shipsPlayer1;
+    private static List<Ship> defeatedShipsPlayer1;
     private static List<Ship> shipsPlayer2;
+    private static List<Ship> defeatedShipsPlayer2;
 
     private static final int NUMBER_OF_SHIPS = 10;
 
@@ -28,7 +30,9 @@ public class Game extends JFrame {
 
 
         shipsPlayer1 = new ArrayList<>();
+        defeatedShipsPlayer1 = new ArrayList<>();
         shipsPlayer2 = new ArrayList<>();
+        defeatedShipsPlayer2 = new ArrayList<>();
 
 
         // Игрок 1
@@ -174,6 +178,13 @@ public class Game extends JFrame {
 
     public static List<Ship> getShipsPlayer2() {
         return shipsPlayer2;
+    }
+    public static List<Ship> getDefeatedShipsPlayer1() {
+        return defeatedShipsPlayer1;
+    }
+
+    public static List<Ship> getDefeatedShipsPlayer2() {
+        return defeatedShipsPlayer2;
     }
 
     public static void main(String[] args) {

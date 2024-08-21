@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Ship {
 
-    private int length;
-    private List<Point> cells;
-    private boolean isVertical;
+    private final int length;
+    private final List<Point> cells;
+    private final boolean isVertical;
 
     public Ship(int length, List<Point> cells, boolean isVertical) {
         this.length = length;
