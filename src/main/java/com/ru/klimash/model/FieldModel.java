@@ -6,7 +6,7 @@ import java.util.List;
 
 public class FieldModel {
 
-    private int[][] field;
+    private final int[][] field;
 
     public static final int FIELD_SIZE = 10;
 
