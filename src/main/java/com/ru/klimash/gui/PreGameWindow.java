@@ -34,11 +34,11 @@ public class PreGameWindow extends JFrame {
         add(panel, BorderLayout.CENTER);
     }
 
-    public void whoStarts() {
-        if (player1RadioButton.isSelected()) {
-            Controller.setIsPlayer1Turn(true);
-        } else {
-            Controller.setIsPlayer2Turn(true);
-        }
-    }
+//    public void whoStarts() {
+//        if (player1RadioButton.isSelected()) { // TODO
+//            Controller.setIsPlayer1Turn(true);
+//        } else {
+//            Controller.setIsPlayer2Turn(true);
+//        }
+//    }
 }

@@ -7,10 +7,11 @@ public class Ship {
 
     private final List<Point> cells;
 
-    // TODO isDefeated
+    private boolean isDefeated;
 
     public Ship(List<Point> cells) {
         this.cells = cells;
+        isDefeated = false;
     }
 
     public static Ship getShipByCoordinates(List<Ship> ships, Point coordinates) {
@@ -24,4 +25,11 @@ public class Ship {
         return cells;
     }
 
+    public void setDefeated(boolean defeated) {
+        isDefeated = defeated;
+    }
+
+    public boolean isDefeated() {
+        return isDefeated;
+    }
 }

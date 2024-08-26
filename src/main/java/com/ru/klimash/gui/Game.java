@@ -1,6 +1,5 @@
 package com.ru.klimash.gui;
 
-import com.ru.klimash.model.Controller;
 import com.ru.klimash.model.GameModel;
 import com.ru.klimash.model.GameStage;
 import com.ru.klimash.model.Ship;
@@ -13,12 +12,10 @@ import java.util.List;
 public class Game extends JFrame {
 
     private static List<Ship> shipsPlayer1;
-    private static List<Ship> defeatedShipsPlayer1; // TODO убрать
     private static List<Ship> shipsPlayer2;
-    private static List<Ship> defeatedShipsPlayer2; // TODO убрать
     private static final int NUMBER_OF_SHIPS = 10;
-
     private static GameStage gameStage;
+    private static GameModel gameModel;
 
 
     public Game() {
@@ -29,18 +26,16 @@ public class Game extends JFrame {
 
         PreGameWindow window = new PreGameWindow();
 
-        gameStage = GameStage.TURN_PLAYER1;
+        Game.setGameStage(GameStage.TURN_PLAYER1);
 
-        GameModel gameModel = new GameModel(gameStage);
+        gameModel = new GameModel();
+
         Field field = new Field();
-        Controller controller = new Controller(field);
+
         add(field, BorderLayout.CENTER);
 
         shipsPlayer1 = new ArrayList<>();
-        defeatedShipsPlayer1 = new ArrayList<>();
         shipsPlayer2 = new ArrayList<>();
-        defeatedShipsPlayer2 = new ArrayList<>();
-
 
         // Игрок 1
 
@@ -159,7 +154,7 @@ public class Game extends JFrame {
             for (Point p : shipsPlayer1.get(i).getCells())
                 field.placeShip_player1(p.x, p.y);
 
-            for (Point p : shipsPlayer2.get(i).getCells()) // TODO подправить отрисовку кораблей с учетом правок
+            for (Point p : shipsPlayer2.get(i).getCells())
                 field.placeShip_player2(p.x, p.y);
         }
         setVisible(true);
@@ -172,19 +167,20 @@ public class Game extends JFrame {
     public static List<Ship> getShipsPlayer2() {
         return shipsPlayer2;
     }
-    public static List<Ship> getDefeatedShipsPlayer1() {
-        return defeatedShipsPlayer1;
-    }
-
-    public static List<Ship> getDefeatedShipsPlayer2() {
-        return defeatedShipsPlayer2;
-    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Game::new);
     }
 
+    public static void setGameStage(GameStage gameStage) {
+        Game.gameStage = gameStage;
+    }
+
     public static GameStage getGameStage() {
         return gameStage;
+    }
+
+    public static GameModel getGameModel() {
+        return gameModel;
     }
 }

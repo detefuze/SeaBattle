@@ -1,6 +1,7 @@
 package com.ru.klimash.model;
 
 import com.ru.klimash.gui.Field;
+import com.ru.klimash.gui.Game;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +16,6 @@ public class Controller extends JPanel {
 
     private static Set<Point> selectedCellsPlayer2;
 
-    private GameModel gameModel;
-
     public Controller(Field field) {
         selectedCellsPlayer1 = new HashSet<>();
         selectedCellsPlayer2 = new HashSet<>();
@@ -26,10 +25,11 @@ public class Controller extends JPanel {
             public void mousePressed(MouseEvent e) {
                 int x = e.getX() / 40;
                 int y = e.getY() / 40;
-                gameModel.cellPressed(x, y);
+                Game.getGameModel().cellPressed(x, y, Game.getGameStage());
                 field.repaint();
             }
         });
+
     }
 
     public static void toggleSelectedCell(int x, int y, GameStage stage) {
