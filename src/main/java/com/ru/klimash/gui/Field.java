@@ -1,56 +1,36 @@
 package com.ru.klimash.gui;
 
-import com.ru.klimash.model.Controller;
-import com.ru.klimash.model.GameManager;
-import com.ru.klimash.model.Ship;
+import com.ru.klimash.model.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Field extends JPanel {
-    private Controller controller;
+    private final Controller controller;
 
-    private GameManager manager = new GameManager();
+    private final GameManager manager = new GameManager();
 
-    private static final int FIELD_SIZE = 10;
+    private final GameModel gameModel = new GameModel(Game.getGameStage());
 
     public Field() {
         controller = new Controller(this);
-        controller.setFieldPlayer1(new int[FIELD_SIZE][FIELD_SIZE]);
-        controller.setFieldPlayer2(new int[FIELD_SIZE+12][FIELD_SIZE]);
-
-        for (int i = 0; i < FIELD_SIZE; i++){
-            for (int j = 0; j < FIELD_SIZE; j++)
-            {
-                Controller.getFieldPlayer1()[i][j] = 0; // 0 - пустая ячейка, 1 - занята кораблем
-                // 2 - попадание // 3 - промах или взрыв вокруг корабля
-            }
-        }
-
-        for (int i = 12; i < FIELD_SIZE+12; i++){
-            for (int j = 0; j < FIELD_SIZE; j++)
-            {
-                Controller.getFieldPlayer2()[i][j] = 0; // 0 - пустая ячейка, 1 - занята кораблем
-                // 2 - попадание // 3 - промах или взрыв вокруг корабля
-            }
-        }
     }
 
-    private void drawSelectedCells(Graphics g) {
-        for (Point cell : controller.getSelectedCells()) {
+    private void drawSelectedCellsPlayer1(Graphics g) {
+        for (Point cell : Controller.getSelectedCellsPlayer1()) {
             int x = (int) cell.getX() * 40;
             int y = (int) cell.getY() * 40;
-            if (cell.x >= 0 && cell.x < FIELD_SIZE && cell.y >= 0 && cell.y < FIELD_SIZE) {
-                if (Controller.getFieldPlayer1()[cell.x][cell.y] == 1 || Controller.getFieldPlayer1()[cell.x][cell.y] == 2) {
+            if (cell.x >= 0 && cell.x < FieldModel.FIELD_SIZE && cell.y >= 0 && cell.y < FieldModel.FIELD_SIZE) {
+                if (gameModel.getPlayer1().getField()[cell.x][cell.y] == 1 || gameModel.getPlayer1().getField()[cell.x][cell.y] == 2) {
                     Ship damagedShip = Ship.getShipByCoordinates(Game.getShipsPlayer1(), new Point(x / 40, y / 40)); // поврежденный корабль
-                    if (Controller.getFieldPlayer1()[cell.x][cell.y] == 1) {
-                        Controller.getFieldPlayer1()[cell.x][cell.y] = 2;
+                    if (gameModel.getPlayer1().getField()[cell.x][cell.y] == 1) {
+                        gameModel.getPlayer1().getField()[cell.x][cell.y] = 2;
                         if (manager.isDeadPlayer1Ship(damagedShip)) { // если корабль подбит
                             Game.getDefeatedShipsPlayer1().add(damagedShip);
-                            manager.paintAroundDefeatedShipPlayer1(damagedShip, damagedShip.isVertical());
+                            manager.paintAroundDefeatedShip(damagedShip, Game.getGameStage());
                         }
                     } else {
-                        Controller.getFieldPlayer1()[cell.x][cell.y] = 2;
+                        gameModel.getPlayer1().getField()[cell.x][cell.y] = 2;
                     }
                     g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
                     g.fillRect(x, y, 40, 40);
@@ -60,25 +40,32 @@ public class Field extends JPanel {
                     g.drawLine(x + 10, y + 10, x + 30, y + 30);
                     g.drawLine(x + 10, y + 30, x + 30, y + 10);
                 } else {
-                    if (!Controller.getExplodedCellsPlayer1().contains(cell)) {
+                    if (!gameModel.getPlayer1().getExplodedCells().contains(cell)) {
                         g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
                         g.fillRect(x, y, 40, 40);
                         g.setColor(Color.BLACK);
                         g.fillRect(x + 15, y + 15, 10, 10);
                     }
-
                 }
-            } else if (cell.x >= FIELD_SIZE+2 && cell.x < FIELD_SIZE+12 && cell.y >= 0 && cell.y < FIELD_SIZE) {
-                if (Controller.getFieldPlayer2()[cell.x][cell.y] == 1 || Controller.getFieldPlayer2()[cell.x][cell.y] == 2) {
+            }
+        }
+    }
+
+    public void drawSelectedCellsPlayer2(Graphics g) {
+        for (Point cell : Controller.getSelectedCellsPlayer2()) {
+            int x = (int) cell.getX() * 40;
+            int y = (int) cell.getY() * 40;
+            if (cell.x >= FieldModel.FIELD_SIZE+2 && cell.x < FieldModel.FIELD_SIZE+12 && cell.y >= 0 && cell.y < FieldModel.FIELD_SIZE) {
+                if (gameModel.getPlayer2().getField()[cell.x][cell.y] == 1 || gameModel.getPlayer2().getField()[cell.x][cell.y] == 2) {
                     Ship damagedShip = Ship.getShipByCoordinates(Game.getShipsPlayer2(), new Point(x / 40, y / 40)); // поврежденный корабль
-                    if (Controller.getFieldPlayer2()[cell.x][cell.y] == 1) {
-                        Controller.getFieldPlayer2()[cell.x][cell.y] = 2;
+                    if (gameModel.getPlayer2().getField()[cell.x][cell.y] == 1) {
+                        gameModel.getPlayer2().getField()[cell.x][cell.y] = 2;
                         if (manager.isDeadPlayer2Ship(damagedShip)) { // если корабль подбит
                             Game.getDefeatedShipsPlayer2().add(damagedShip);
-                            manager.paintAroundDefeatedShipPlayer2(damagedShip, damagedShip.isVertical());
+                            manager.paintAroundDefeatedShip(damagedShip, Game.getGameStage());
                         }
                     } else {
-                        Controller.getFieldPlayer2()[cell.x][cell.y] = 2;
+                        gameModel.getPlayer2().getField()[cell.x][cell.y] = 2;
                     }
                     g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
                     g.fillRect(x, y, 40, 40);
@@ -88,7 +75,7 @@ public class Field extends JPanel {
                     g.drawLine(x + 10, y + 10, x + 30, y + 30);
                     g.drawLine(x + 10, y + 30, x + 30, y + 10);
                 } else {
-                    if (!Controller.getExplodedCellsPlayer2().contains(cell)) {
+                    if (!gameModel.getPlayer2().getExplodedCells().contains(cell)) {
                         g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
                         g.fillRect(x, y, 40, 40);
                         g.setColor(Color.BLACK);
@@ -101,8 +88,8 @@ public class Field extends JPanel {
 
     private void drawAreaAroundDefeatedShipPlayer1(Graphics g) {
         if (!Game.getDefeatedShipsPlayer1().isEmpty()) {
-            for (Point cell : Controller.getExplodedCellsPlayer1()) {
-                g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
+            for (Point cell : gameModel.getPlayer1().getExplodedCells()) {
+                g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый // TODO оптимизировать
                 g.fillRect(cell.x*40, cell.y*40, 40, 40);
                 g.setColor(Color.BLACK);
                 g.fillRect(cell.x*40 + 15, cell.y*40 + 15, 10, 10);
@@ -112,9 +99,8 @@ public class Field extends JPanel {
 
     private void drawAreaAroundDefeatedShipPlayer2(Graphics g) {
         if (!Game.getDefeatedShipsPlayer2().isEmpty()) {
-
-            for (Point cell : Controller.getExplodedCellsPlayer2()) {
-                g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
+            for (Point cell : gameModel.getPlayer2().getExplodedCells()) {
+                g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый // TODO оптимизировать
                 g.fillRect(cell.x*40, cell.y*40, 40, 40);
                 g.setColor(Color.BLACK);
                 g.fillRect(cell.x*40 + 15, cell.y*40 + 15, 10, 10);
@@ -124,8 +110,8 @@ public class Field extends JPanel {
 
     private void drawFieldPlayer1(Graphics g) {
         g.setColor(Color.BLUE.brighter());
-        for (int i = 0; i < FIELD_SIZE; i++){
-            for (int j = 0; j < FIELD_SIZE; j++)
+        for (int i = 0; i < FieldModel.FIELD_SIZE; i++){
+            for (int j = 0; j < FieldModel.FIELD_SIZE; j++)
             {
                 g.drawRect(i * 40, j * 40, 40, 40);
             }
@@ -134,8 +120,8 @@ public class Field extends JPanel {
 
     private void drawFieldPlayer2(Graphics g) {
         g.setColor(Color.BLUE.brighter());
-        for (int i = 12; i < FIELD_SIZE+12; i++){
-            for (int j = 0; j < FIELD_SIZE; j++)
+        for (int i = 12; i < FieldModel.FIELD_SIZE+12; i++){
+            for (int j = 0; j < FieldModel.FIELD_SIZE; j++)
             {
                 g.drawRect(i * 40, j * 40, 40, 40);
             }
@@ -148,21 +134,21 @@ public class Field extends JPanel {
     }
 
     void placeShip_player1(int x, int y) {
-        Controller.getFieldPlayer1()[x][y] = 1;
+        gameModel.getPlayer1().getField()[x][y] = 1;
         repaint();
     }
 
     void placeShip_player2(int x, int y) {
-        Controller.getFieldPlayer2()[x][y] = 1;
+        gameModel.getPlayer2().getField()[x+12][y] = 1;
         repaint();
     }
 
     private void drawShipsPlayer1(Graphics g) {
         g.setColor(Color.ORANGE);
-        for (int i = 0; i < FIELD_SIZE; i++){
-            for (int j = 0; j < FIELD_SIZE; j++)
+        for (int i = 0; i < FieldModel.FIELD_SIZE; i++){
+            for (int j = 0; j < FieldModel.FIELD_SIZE; j++)
             {
-                if (Controller.getFieldPlayer1()[i][j] == 1)
+                if (gameModel.getPlayer1().getField()[i][j] == 1)
                     g.fillOval(i * 40, j * 40, 39, 39);
             }
         }
@@ -170,10 +156,10 @@ public class Field extends JPanel {
 
     private void drawShipsPlayer2(Graphics g) {
         g.setColor(Color.ORANGE);
-        for (int i = 12; i < FIELD_SIZE+12; i++){
-            for (int j = 0; j < FIELD_SIZE; j++)
+        for (int i = 12; i < FieldModel.FIELD_SIZE+12; i++){
+            for (int j = 0; j < FieldModel.FIELD_SIZE; j++)
             {
-                if (Controller.getFieldPlayer2()[i][j] == 1)
+                if (gameModel.getPlayer2().getField()[i][j] == 1)
                     g.fillOval(i * 40, j * 40, 39, 39);
             }
         }
@@ -187,12 +173,11 @@ public class Field extends JPanel {
         drawFieldPlayer2(g);
         drawShipsPlayer1(g);
         drawShipsPlayer2(g);
-        drawSelectedCells(g);
+        if (Game.getGameStage().equals(GameStage.TURN_PLAYER1))
+            drawSelectedCellsPlayer2(g);
+        else if (Game.getGameStage().equals(GameStage.TURN_PLAYER2))
+            drawSelectedCellsPlayer1(g);
         drawAreaAroundDefeatedShipPlayer1(g);
         drawAreaAroundDefeatedShipPlayer2(g);
-    }
-
-    public static int getFieldSize() {
-        return FIELD_SIZE;
     }
 }

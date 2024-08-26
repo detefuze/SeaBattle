@@ -5,14 +5,12 @@ import java.util.List;
 
 public class Ship {
 
-    private final int length;
     private final List<Point> cells;
-    private final boolean isVertical;
 
-    public Ship(int length, List<Point> cells, boolean isVertical) {
-        this.length = length;
+    // TODO isDefeated
+
+    public Ship(List<Point> cells) {
         this.cells = cells;
-        this.isVertical = isVertical;
     }
 
     public static Ship getShipByCoordinates(List<Ship> ships, Point coordinates) {
@@ -26,11 +24,4 @@ public class Ship {
         return cells;
     }
 
-    public int getLength() {
-        return length;
-    }
-
-    public boolean isVertical() {
-        return isVertical;
-    }
 }
