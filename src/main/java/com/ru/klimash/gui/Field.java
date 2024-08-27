@@ -72,7 +72,7 @@ public class Field extends JPanel {
                     g.drawLine(x + 10, y + 10, x + 30, y + 30);
                     g.drawLine(x + 10, y + 30, x + 30, y + 10);
                 } else {
-                    if (!GameModel.getPlayer2().getExplodedCellsPlayer2().contains(new Point(cell.x-12, cell.y))) {
+                    if (!GameModel.getPlayer2().getExplodedCellsPlayer2().contains(new Point(cell.x - 12, cell.y))) {
                         g.setColor(new Color(128, 128, 128, 128));
                         g.fillRect(cell.x * 40, cell.y * 40, 40, 40);
                         g.setColor(Color.BLACK);

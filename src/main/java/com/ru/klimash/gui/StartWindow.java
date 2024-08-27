@@ -1,27 +1,27 @@
 package com.ru.klimash.gui;
 
-import com.ru.klimash.model.Controller;
+import com.ru.klimash.model.GameStage;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class PreGameWindow extends JFrame {
+public class StartWindow extends JFrame {
 
     private JRadioButton player1RadioButton;
     private JRadioButton player2RadioButton;
     private JButton startButton;
-    PreGameWindow() {
+    public StartWindow() {
         setTitle("Sea Battle");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);
         setLocationRelativeTo(null);
 
-        // Создание компонентов
+
         JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
         ButtonGroup buttonGroup = new ButtonGroup();
 
-        player1RadioButton = new JRadioButton("Player 1 starts first");
-        player2RadioButton = new JRadioButton("Player 2 starts first");
+        player1RadioButton = new JRadioButton("Player 1 starts");
+        player2RadioButton = new JRadioButton("Player 2 starts");
         startButton = new JButton("Start Game");
 
         buttonGroup.add(player1RadioButton);
@@ -32,13 +32,20 @@ public class PreGameWindow extends JFrame {
         panel.add(startButton);
 
         add(panel, BorderLayout.CENTER);
+
+        startButton.addActionListener(e -> {
+            dispose(); // Закрываем окно
+            if (player1RadioButton.isSelected())
+                Game.setGameStage(GameStage.TURN_PLAYER1);
+            else if (player2RadioButton.isSelected())
+                Game.setGameStage(GameStage.TURN_PLAYER2);
+            Game game = new Game(); // запуск игры
+        });
+
+        setVisible(true);
     }
 
-//    public void whoStarts() {
-//        if (player1RadioButton.isSelected()) { // TODO
-//            Controller.setIsPlayer1Turn(true);
-//        } else {
-//            Controller.setIsPlayer2Turn(true);
-//        }
-//    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(StartWindow::new);
+    }
 }

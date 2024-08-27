@@ -24,10 +24,6 @@ public class Game extends JFrame {
         setSize(1180, 515);
         setLocationRelativeTo(null);
 
-        PreGameWindow window = new PreGameWindow();
-
-        Game.setGameStage(GameStage.TURN_PLAYER1);
-
         gameModel = new GameModel();
 
         Field field = new Field();
@@ -157,6 +153,7 @@ public class Game extends JFrame {
             for (Point p : shipsPlayer2.get(i).getCells())
                 field.placeShip_player2(p.x, p.y);
         }
+
         setVisible(true);
     }
 

@@ -2,6 +2,7 @@ package com.ru.klimash.model;
 
 import com.ru.klimash.gui.Game;
 
+import javax.naming.ldap.Control;
 import java.awt.*;
 
 public class GameModel {
@@ -24,24 +25,29 @@ public class GameModel {
         }
     }
     public void cellPressed(int x, int y, GameStage stage) {
-        switch (stage) {
-            case TURN_PLAYER1 -> {
-                player2.isPressed(x, y, stage);
-                try {
-                    if (player2.getField()[x - 12][y] == 0)
-                        GameManager.ChangePlayer();
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    System.out.println("Ход 1 игрока!");
+        if ((!GameModel.getPlayer2().getExplodedCellsPlayer2().contains(new Point(x - 12, y)) &&
+                !GameModel.getPlayer2().getExplodedCellsPlayer1().contains(new Point(x, y))) &&
+                (!Controller.getSelectedCellsPlayer1().contains(new Point(x, y)) &&
+                        !Controller.getSelectedCellsPlayer2().contains(new Point(x, y)))) {
+            switch (stage) {
+                case TURN_PLAYER1 -> {
+                    player2.isPressed(x, y, stage);
+                    try {
+                        if (player2.getField()[x - 12][y] == 0)
+                            GameManager.ChangePlayer();
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Ход 1 игрока!");
+                    }
                 }
-            }
 
-            case TURN_PLAYER2 -> {
-                player1.isPressed(x, y, stage);
-                try {
-                    if (player1.getField()[x][y] == 0)
-                        GameManager.ChangePlayer();
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    System.out.println("Ход 2 игрока!");
+                case TURN_PLAYER2 -> {
+                    player1.isPressed(x, y, stage);
+                    try {
+                        if (player1.getField()[x][y] == 0)
+                            GameManager.ChangePlayer();
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        System.out.println("Ход 2 игрока!");
+                    }
                 }
             }
         }
@@ -56,6 +62,17 @@ public class GameModel {
             case TURN_PLAYER2 -> {
                 if (!GameModel.getPlayer1().getExplodedCellsPlayer1().contains(new Point(x, y)))
                     GameModel.getPlayer1().getExplodedCellsPlayer1().add(new Point(x, y));
+            }
+        }
+    }
+
+    public static void addAllCells(int x, int y, GameStage gameStage) {
+        switch (gameStage) {
+            case TURN_PLAYER1 -> {
+                Controller.getSelectedCellsPlayer2().add(new Point(x, y));
+            }
+            case TURN_PLAYER2 -> {
+                Controller.getSelectedCellsPlayer1().add(new Point(x, y));
             }
         }
     }

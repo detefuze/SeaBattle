@@ -1,13 +1,14 @@
 package com.ru.klimash;
 
-/**
- * Hello world!
- *
- */
+import com.ru.klimash.gui.StartWindow;
+
+import javax.swing.*;
+
+
 public class App 
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+        SwingUtilities.invokeLater(StartWindow::new);
     }
 }
