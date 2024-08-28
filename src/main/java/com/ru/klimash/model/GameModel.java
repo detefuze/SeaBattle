@@ -1,8 +1,5 @@
 package com.ru.klimash.model;
 
-import com.ru.klimash.gui.Game;
-
-import javax.naming.ldap.Control;
 import java.awt.*;
 
 public class GameModel {
@@ -65,18 +62,6 @@ public class GameModel {
             }
         }
     }
-
-    public static void addAllCells(int x, int y, GameStage gameStage) {
-        switch (gameStage) {
-            case TURN_PLAYER1 -> {
-                Controller.getSelectedCellsPlayer2().add(new Point(x, y));
-            }
-            case TURN_PLAYER2 -> {
-                Controller.getSelectedCellsPlayer1().add(new Point(x, y));
-            }
-        }
-    }
-
 
 
     public static FieldModel getPlayer1() {

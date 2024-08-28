@@ -36,14 +36,8 @@ public class Controller extends JPanel {
         Point cell = new Point(x, y);
 
         switch (stage) {
-            case TURN_PLAYER1 -> {
-                selectedCellsPlayer2.add(cell);
-            }
-            case TURN_PLAYER2 -> {
-                selectedCellsPlayer1.add(cell);
-            }
-            case GAME_OVER -> {
-            }
+            case TURN_PLAYER1 -> selectedCellsPlayer2.add(cell);
+            case TURN_PLAYER2 -> selectedCellsPlayer1.add(cell);
         }
     }
 

@@ -6,12 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Field extends JPanel {
-    private final Controller controller;
 
     private final GameManager manager = new GameManager();
 
     public Field() {
-        controller = new Controller(this);
+        Controller controller = new Controller(this);
     }
 
     private void drawSelectedCellsPlayer1(Graphics g) {
@@ -29,19 +28,10 @@ public class Field extends JPanel {
                     } else {
                         GameModel.getPlayer1().getField()[cell.x][cell.y] = 2;
                     }
-                    g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
-                    g.fillRect(x, y, 40, 40);
-                    g.setColor(Color.RED);
-                    g.fillOval(x, y, 40, 40);
-                    g.setColor(Color.BLACK);
-                    g.drawLine(x + 10, y + 10, x + 30, y + 30);
-                    g.drawLine(x + 10, y + 30, x + 30, y + 10);
+                    drawDeadShipCells(g, x, y);
                 } else {
                     if (!GameModel.getPlayer1().getExplodedCellsPlayer1().contains(cell)) {
-                        g.setColor(new Color(128, 128, 128, 128));
-                        g.fillRect(cell.x * 40, cell.y * 40, 40, 40);
-                        g.setColor(Color.BLACK);
-                        g.fillRect(cell.x * 40 + 15, cell.y * 40 + 15, 10, 10);
+                        drawMiss(g, cell);
                     }
                 }
             }
@@ -64,19 +54,10 @@ public class Field extends JPanel {
                     } else {
                         GameModel.getPlayer2().getField()[cell.x - 12][cell.y] = 2;
                     }
-                    g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
-                    g.fillRect(x, y, 40, 40);
-                    g.setColor(Color.RED);
-                    g.fillOval(x, y, 40, 40);
-                    g.setColor(Color.BLACK);
-                    g.drawLine(x + 10, y + 10, x + 30, y + 30);
-                    g.drawLine(x + 10, y + 30, x + 30, y + 10);
+                    drawDeadShipCells(g, x, y);
                 } else {
                     if (!GameModel.getPlayer2().getExplodedCellsPlayer2().contains(new Point(cell.x - 12, cell.y))) {
-                        g.setColor(new Color(128, 128, 128, 128));
-                        g.fillRect(cell.x * 40, cell.y * 40, 40, 40);
-                        g.setColor(Color.BLACK);
-                        g.fillRect(cell.x * 40 + 15, cell.y * 40 + 15, 10, 10);
+                        drawMiss(g, cell);
                     }
                 }
             }
@@ -86,10 +67,7 @@ public class Field extends JPanel {
     private void drawAreaAroundDefeatedShipPlayer1(Graphics g) {
         if (!GameModel.getPlayer1().getExplodedCellsPlayer1().isEmpty()) {
             for (Point cell : GameModel.getPlayer1().getExplodedCellsPlayer1()) {
-                g.setColor(new Color(128, 128, 128, 128));
-                g.fillRect(cell.x * 40, cell.y * 40, 40, 40);
-                g.setColor(Color.BLACK);
-                g.fillRect(cell.x * 40 + 15, cell.y * 40 + 15, 10, 10);
+                drawMiss(g, cell);
             }
         }
     }
@@ -158,8 +136,25 @@ public class Field extends JPanel {
         }
     }
 
+    private void drawMiss(Graphics g, Point cell) {
+        g.setColor(new Color(128, 128, 128, 128));
+        g.fillRect(cell.x * 40, cell.y * 40, 40, 40);
+        g.setColor(Color.BLACK);
+        g.fillRect(cell.x * 40 + 15, cell.y * 40 + 15, 10, 10);
+    }
+
+    private void drawDeadShipCells(Graphics g, int x, int y) {
+        g.setColor(new Color(128, 128, 128, 128)); // Полупрозрачный серый
+        g.fillRect(x, y, 40, 40);
+        g.setColor(Color.RED);
+        g.fillOval(x, y, 40, 40);
+        g.setColor(Color.BLACK);
+        g.drawLine(x + 10, y + 10, x + 30, y + 30);
+        g.drawLine(x + 10, y + 30, x + 30, y + 10);
+    }
+
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawFieldPlayer1(g);
         drawBorder(g);
@@ -170,5 +165,6 @@ public class Field extends JPanel {
         drawSelectedCellsPlayer2(g);
         drawAreaAroundDefeatedShipPlayer1(g);
         drawAreaAroundDefeatedShipPlayer2(g);
+        Game.getGame().gameIsOver(); // TODO разместить в model
     }
 }

@@ -14,6 +14,8 @@ public class GameManager {
             }
         }
         ship.setDefeated(true);
+        if (arePlayerShipsDefeated(GameModel.getPlayer1()))
+            Game.setGameStage(GameStage.GAME_OVER);
         return ship.isDefeated();
     }
 
@@ -24,6 +26,23 @@ public class GameManager {
             }
         }
         ship.setDefeated(true);
+        if (arePlayerShipsDefeated(GameModel.getPlayer2()))
+            Game.setGameStage(GameStage.GAME_OVER);
+        return true;
+    }
+
+    public static boolean arePlayerShipsDefeated(FieldModel player) {
+        if (player.equals(GameModel.getPlayer1())) {
+            for (Ship ship : Game.getShipsPlayer1()) {
+                if (!ship.isDefeated())
+                    return false;
+            }
+        } else if (player.equals(GameModel.getPlayer2())) {
+            for (Ship ship : Game.getShipsPlayer2()) {
+                if (!ship.isDefeated())
+                    return false;
+            }
+        }
         return true;
     }
 
