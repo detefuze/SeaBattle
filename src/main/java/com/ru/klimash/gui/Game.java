@@ -1,9 +1,6 @@
 package com.ru.klimash.gui;
 
-import com.ru.klimash.model.GameManager;
-import com.ru.klimash.model.GameModel;
-import com.ru.klimash.model.GameStage;
-import com.ru.klimash.model.Ship;
+import com.ru.klimash.model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,6 +27,8 @@ public class Game extends JFrame {
         gameModel = new GameModel();
 
         Field field = new Field();
+
+        Controller controller = new Controller(field);
 
         add(field, BorderLayout.CENTER);
 

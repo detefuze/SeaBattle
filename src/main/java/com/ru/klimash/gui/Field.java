@@ -9,10 +9,6 @@ public class Field extends JPanel {
 
     private final GameManager manager = new GameManager();
 
-    public Field() {
-        Controller controller = new Controller(this);
-    }
-
     private void drawSelectedCellsPlayer1(Graphics g) {
         for (Point cell : Controller.getSelectedCellsPlayer1()) {
             int x = (int) cell.getX() * 40;
