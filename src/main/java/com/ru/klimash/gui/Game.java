@@ -159,19 +159,13 @@ public class Game extends JFrame {
         setVisible(true);
     }
 
-    public void gameIsOver() {
-        if (Game.getGameStage().equals(GameStage.GAME_OVER))
-            dispose();
+    public static String whoWins() {
         if (GameManager.arePlayerShipsDefeated(GameModel.getPlayer2()))
-            System.out.println("Game is over!\nPlayer 1 wins!");
+            return "Player 1 wins!";
         else if (GameManager.arePlayerShipsDefeated(GameModel.getPlayer1()))
-            System.out.println("Game is over!\nPlayer 2 wins!");
+            return "Player 2 wins!";
+        return "";
     }
-
-    public static Game getGame() {
-        return game;
-    }
-
     public static void setGame(Game game) {
         Game.game = game;
     }

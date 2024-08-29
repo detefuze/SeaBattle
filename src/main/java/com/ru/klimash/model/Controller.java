@@ -29,7 +29,6 @@ public class Controller extends JPanel {
                 field.repaint();
             }
         });
-
     }
 
     public static void toggleSelectedCell(int x, int y, GameStage stage) {

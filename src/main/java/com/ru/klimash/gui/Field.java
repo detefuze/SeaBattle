@@ -95,8 +95,11 @@ public class Field extends JPanel {
             }
         }
         // отрисовка окна
-        messageLabel.setBounds(350, 400, 300, 30);
-        messageLabel.setText("Stage: " + Game.getGameStage());
+        messageLabel.setBounds(350, 400, 300, 60);
+        if (Game.getGameStage().equals(GameStage.GAME_OVER)) {
+            messageLabel.setText("Stage: " + Game.getGameStage() + "   " + Game.whoWins());
+        }
+        else messageLabel.setText("Stage: " + Game.getGameStage());
     }
 
     private void drawBorder(Graphics g) {
@@ -138,7 +141,7 @@ public class Field extends JPanel {
             g.setColor(GRAY_COLOR);
             g.fillRect(cell.x * CELL_SIZE, cell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
             g.setColor(Color.BLACK);
-            g.fillRect(cell.x * CELL_SIZE + MISS_COORDINATES, cell.y * CELL_SIZE + MISS_COORDINATES, WIDTH_OF_MISS, HEIGHT_OF_MISS);  // TODO Разобраться с числами
+            g.fillRect(cell.x * CELL_SIZE + MISS_COORDINATES, cell.y * CELL_SIZE + MISS_COORDINATES, WIDTH_OF_MISS, HEIGHT_OF_MISS);
         } else if (player.equals(GameModel.getPlayer2())) {
             g.setColor(GRAY_COLOR);
             g.fillRect((cell.x + FIELD2_DISTANCE_FROM_START_COORDINATES) * CELL_SIZE, cell.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);

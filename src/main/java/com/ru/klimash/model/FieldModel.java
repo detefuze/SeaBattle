@@ -13,7 +13,7 @@ public class FieldModel {
 
     public static final int FIELD_SIZE = 10;
 
-    private List<Point> explodedCells;
+    private final List<Point> explodedCells;
 
     public FieldModel() {
         field = new int[FIELD_SIZE][FIELD_SIZE];

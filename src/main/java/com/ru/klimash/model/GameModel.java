@@ -29,13 +29,9 @@ public class GameModel {
                 (!Controller.getSelectedCellsPlayer1().contains(new Point(x, y)) &&
                         !Controller.getSelectedCellsPlayer2().contains(new Point(x, y)))) {
             switch (stage) {
-                case TURN_PLAYER1 -> {
-                    player2.isPressed(x, y, stage);
-                }
+                case TURN_PLAYER1 -> player2.isPressed(x, y, stage);
 
-                case TURN_PLAYER2 -> {
-                    player1.isPressed(x, y, stage);
-                }
+                case TURN_PLAYER2 -> player1.isPressed(x, y, stage);
             }
         }
     }
