@@ -23,8 +23,8 @@ public class Controller extends JPanel {
         field.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                int x = e.getX() / 40;
-                int y = e.getY() / 40;
+                int x = e.getX() / Field.CELL_SIZE;
+                int y = e.getY() / Field.CELL_SIZE;
                 Game.getGameModel().cellPressed(x, y, Game.getGameStage());
                 field.repaint();
             }
@@ -37,6 +37,7 @@ public class Controller extends JPanel {
 
         switch (stage) {
             case TURN_PLAYER1 -> selectedCellsPlayer2.add(cell);
+
             case TURN_PLAYER2 -> selectedCellsPlayer1.add(cell);
         }
     }

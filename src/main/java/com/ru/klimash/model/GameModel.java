@@ -1,5 +1,7 @@
 package com.ru.klimash.model;
 
+import com.ru.klimash.gui.Field;
+
 import java.awt.*;
 
 public class GameModel {
@@ -22,29 +24,17 @@ public class GameModel {
         }
     }
     public void cellPressed(int x, int y, GameStage stage) {
-        if ((!GameModel.getPlayer2().getExplodedCellsPlayer2().contains(new Point(x - 12, y)) &&
-                !GameModel.getPlayer2().getExplodedCellsPlayer1().contains(new Point(x, y))) &&
+        if ((!GameModel.getPlayer2().getExplodedCells().contains(new Point(x - Field.FIELD2_DISTANCE_FROM_START_COORDINATES, y)) &&
+                !GameModel.getPlayer1().getExplodedCells().contains(new Point(x, y))) &&
                 (!Controller.getSelectedCellsPlayer1().contains(new Point(x, y)) &&
                         !Controller.getSelectedCellsPlayer2().contains(new Point(x, y)))) {
             switch (stage) {
                 case TURN_PLAYER1 -> {
                     player2.isPressed(x, y, stage);
-                    try {
-                        if (player2.getField()[x - 12][y] == 0)
-                            GameManager.ChangePlayer();
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        System.out.println("Ход 1 игрока!");
-                    }
                 }
 
                 case TURN_PLAYER2 -> {
                     player1.isPressed(x, y, stage);
-                    try {
-                        if (player1.getField()[x][y] == 0)
-                            GameManager.ChangePlayer();
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        System.out.println("Ход 2 игрока!");
-                    }
                 }
             }
         }
@@ -53,12 +43,12 @@ public class GameModel {
     public void addExplodedCell(int x, int y, GameStage stage) {
         switch (stage) {
             case TURN_PLAYER1 -> {
-                if (!GameModel.getPlayer2().getExplodedCellsPlayer2().contains(new Point(x, y)))
-                    GameModel.getPlayer2().getExplodedCellsPlayer2().add(new Point(x, y));
+                if (!GameModel.getPlayer2().getExplodedCells().contains(new Point(x, y)))
+                    GameModel.getPlayer2().getExplodedCells().add(new Point(x, y));
             }
             case TURN_PLAYER2 -> {
-                if (!GameModel.getPlayer1().getExplodedCellsPlayer1().contains(new Point(x, y)))
-                    GameModel.getPlayer1().getExplodedCellsPlayer1().add(new Point(x, y));
+                if (!GameModel.getPlayer1().getExplodedCells().contains(new Point(x, y)))
+                    GameModel.getPlayer1().getExplodedCells().add(new Point(x, y));
             }
         }
     }

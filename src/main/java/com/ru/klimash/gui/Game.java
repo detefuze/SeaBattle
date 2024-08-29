@@ -150,10 +150,10 @@ public class Game extends JFrame {
         for (int i = 0; i < NUMBER_OF_SHIPS; i++) {
 
             for (Point p : shipsPlayer1.get(i).getCells())
-                field.placeShip_player1(p.x, p.y);
+                field.placeShip(p.x, p.y, GameModel.getPlayer1());
 
             for (Point p : shipsPlayer2.get(i).getCells())
-                field.placeShip_player2(p.x, p.y);
+                field.placeShip(p.x, p.y, GameModel.getPlayer2());
         }
 
         setVisible(true);
@@ -182,10 +182,6 @@ public class Game extends JFrame {
 
     public static List<Ship> getShipsPlayer2() {
         return shipsPlayer2;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(Game::new);
     }
 
     public static void setGameStage(GameStage gameStage) {

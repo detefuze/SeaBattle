@@ -7,29 +7,25 @@ import java.util.ArrayList;
 
 public class GameManager {
 
-    public boolean isDeadPlayer1Ship(Ship ship) {
-        for (Point p : ship.getCells()) {
-            if (GameModel.getPlayer1().getField()[p.x][p.y] == 1) {
-                return ship.isDefeated();
+    public static boolean isShipDead(Ship ship, FieldModel player) {
+        if (player.equals(GameModel.getPlayer1())) {
+            for (Point p : ship.getCells()) {
+                if (GameModel.getPlayer1().getField()[p.x][p.y] == 1) {
+                    return ship.isDefeated();
+                }
             }
+            ship.setDefeated(true);
+        } else if (player.equals(GameModel.getPlayer2())) {
+            for (Point p : ship.getCells()) {
+                if (GameModel.getPlayer2().getField()[p.x][p.y] == 1) {
+                    return false;
+                }
+            }
+            ship.setDefeated(true);
         }
-        ship.setDefeated(true);
-        if (arePlayerShipsDefeated(GameModel.getPlayer1()))
-            Game.setGameStage(GameStage.GAME_OVER);
         return ship.isDefeated();
     }
 
-    public boolean isDeadPlayer2Ship(Ship ship) {
-        for (Point p : ship.getCells()) {
-            if (GameModel.getPlayer2().getField()[p.x][p.y] == 1) {
-                return false;
-            }
-        }
-        ship.setDefeated(true);
-        if (arePlayerShipsDefeated(GameModel.getPlayer2()))
-            Game.setGameStage(GameStage.GAME_OVER);
-        return true;
-    }
 
     public static boolean arePlayerShipsDefeated(FieldModel player) {
         if (player.equals(GameModel.getPlayer1())) {
@@ -46,7 +42,7 @@ public class GameManager {
         return true;
     }
 
-    public void paintAroundDefeatedShip(Ship ship, FieldModel player, GameStage gameStage) {
+    public static void paintAroundDefeatedShip(Ship ship, FieldModel player, GameStage gameStage) {
         ArrayList<Point> cells = (ArrayList<Point>) ship.getCells();
         if (cells.size() == 1) {
             Point cell = cells.get(0);
