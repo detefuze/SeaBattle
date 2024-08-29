@@ -9,7 +9,7 @@ public class Field extends JPanel {
 
     private final JLabel messageLabel;
     
-    public final static int CELL_SIZE = 30;
+    public final static int CELL_SIZE = 70;
     private final static int DISTANCE_BETWEEN_FIELDS = 4;
     private final static int MISS_COORDINATES = Math.round(0.375f*CELL_SIZE);
     private final static int HEIGHT_OF_MISS = Math.round(0.25f*CELL_SIZE);
@@ -95,7 +95,7 @@ public class Field extends JPanel {
             }
         }
         // отрисовка окна
-        messageLabel.setBounds(350, 400, 300, 60);
+        messageLabel.setBounds((CELL_SIZE*10)-(int)Math.round(0.125*CELL_SIZE), CELL_SIZE*10, 300, 60);
         if (Game.getGameStage().equals(GameStage.GAME_OVER)) {
             messageLabel.setText("Stage: " + Game.getGameStage() + "   " + Game.whoWins());
         }
