@@ -9,7 +9,7 @@ public class Field extends JPanel {
 
     private final JLabel messageLabel;
     
-    public final static int CELL_SIZE = 40;
+    public final static int CELL_SIZE = 30;
     private final static int DISTANCE_BETWEEN_FIELDS = 4;
     private final static int MISS_COORDINATES = Math.round(0.375f*CELL_SIZE);
     private final static int HEIGHT_OF_MISS = Math.round(0.25f*CELL_SIZE);
@@ -104,7 +104,7 @@ public class Field extends JPanel {
 
     private void drawBorder(Graphics g) {
         g.setColor(Color.WHITE);
-        g.fillRect(401, 0, DISTANCE_BETWEEN_FIELDS * CELL_SIZE, CELL_SIZE * 10);
+        g.fillRect((CELL_SIZE * 10)+1, 0, DISTANCE_BETWEEN_FIELDS * CELL_SIZE, CELL_SIZE * 10);
     }
 
     void placeShip(int x, int y, FieldModel player) {
