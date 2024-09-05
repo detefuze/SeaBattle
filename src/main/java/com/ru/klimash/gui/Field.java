@@ -4,12 +4,12 @@ import com.ru.klimash.model.*;
 
 import javax.swing.*;
 import java.awt.*;
-
+import javafx.util.Pair;
 public class Field extends JPanel {
 
     private final JLabel messageLabel;
     
-    public final static int CELL_SIZE = 70;
+    public final static int CELL_SIZE = 50;
     private final static int DISTANCE_BETWEEN_FIELDS = 4;
     private final static int MISS_COORDINATES = Math.round(0.375f*CELL_SIZE);
     private final static int HEIGHT_OF_MISS = Math.round(0.25f*CELL_SIZE);
@@ -47,15 +47,15 @@ public class Field extends JPanel {
             }
         } else if (player.equals(GameModel.getPlayer2())) {
             for (Point cell : Controller.getSelectedCellsPlayer2()) {
-                int x = (int) cell.getX() * CELL_SIZE;
+                int x = ((int) cell.getX() + FIELD2_DISTANCE_FROM_START_COORDINATES) * CELL_SIZE;
                 int y = (int) cell.getY() * CELL_SIZE;
 
-                if (cell.x >= FieldModel.FIELD_SIZE + 2 && cell.x < FieldModel.FIELD_SIZE + FIELD2_DISTANCE_FROM_START_COORDINATES && cell.y >= 0 && cell.y < FieldModel.FIELD_SIZE) {
-                    if (GameModel.getPlayer2().getField()[cell.x - FIELD2_DISTANCE_FROM_START_COORDINATES][cell.y] == 1 || GameModel.getPlayer2().getField()[cell.x - FIELD2_DISTANCE_FROM_START_COORDINATES][cell.y] == 2) {
+                if (cell.x >= 0 && cell.x < FieldModel.FIELD_SIZE && cell.y >= 0 && cell.y < FieldModel.FIELD_SIZE) {
+                    if (GameModel.getPlayer2().getField()[cell.x][cell.y] == 1 || GameModel.getPlayer2().getField()[cell.x][cell.y] == 2) {
                         drawDeadShipCells(g, x, y);
                     } else {
-                        if (!GameModel.getPlayer2().getExplodedCells().contains(new Point(cell.x - FIELD2_DISTANCE_FROM_START_COORDINATES, cell.y))) {
-                            drawMiss(g, new Point(cell.x - FIELD2_DISTANCE_FROM_START_COORDINATES, cell.y), GameModel.getPlayer2());
+                        if (!GameModel.getPlayer2().getExplodedCells().contains(new Point(cell.x, cell.y))) {
+                            drawMiss(g, new Point(cell.x, cell.y), GameModel.getPlayer2());
                         }
                     }
                 }
@@ -115,6 +115,26 @@ public class Field extends JPanel {
             GameModel.getPlayer2().getField()[x][y] = 1;
             repaint();
         }
+    }
+
+    public static Pair<Integer, Integer> areCoordinatesCorrect(Pair<Integer, Integer> coordinates, GameStage gameStage) {
+        switch (gameStage) {
+            case TURN_PLAYER1 -> {
+                if ((coordinates.getKey()-FieldModel.FIELD_SIZE >= 0
+                        && coordinates.getKey()-Field.FIELD2_DISTANCE_FROM_START_COORDINATES < FieldModel.FIELD_SIZE
+                        && coordinates.getValue() >= 0 && coordinates.getValue() < FieldModel.FIELD_SIZE)) {
+                    return new Pair<>(coordinates.getKey() - FIELD2_DISTANCE_FROM_START_COORDINATES, coordinates.getValue());
+                }
+            }
+            case TURN_PLAYER2 -> {
+                if (coordinates.getKey() >= 0 && coordinates.getKey() < FieldModel.FIELD_SIZE
+                        && coordinates.getValue() >= 0 && coordinates.getValue() < FieldModel.FIELD_SIZE) {
+                    return coordinates;
+                }
+            }
+        }
+
+        return new Pair<>(100, 100);
     }
 
     private void drawShips(Graphics g, FieldModel player) {

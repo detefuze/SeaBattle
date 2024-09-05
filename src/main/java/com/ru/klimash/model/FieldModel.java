@@ -23,16 +23,14 @@ public class FieldModel {
     public void isPressed(int x, int y, GameStage stage) {
         switch (stage) {
             case TURN_PLAYER1 -> {
-                if ((x-FIELD_SIZE >= 0 && x-Field.FIELD2_DISTANCE_FROM_START_COORDINATES < FIELD_SIZE && y >= 0 && y < FIELD_SIZE)) {
-                    Controller.toggleSelectedCell(x, y, stage);
-                }
+                Controller.toggleSelectedCell(x, y, stage);
                 try {
-                    if (GameModel.getPlayer2().getField()[x - Field.FIELD2_DISTANCE_FROM_START_COORDINATES][y] == 0)
+                    if (GameModel.getPlayer2().getField()[x][y] == 0)
                         GameManager.ChangePlayer();
 
-                    if (GameModel.getPlayer2().getField()[x - Field.FIELD2_DISTANCE_FROM_START_COORDINATES][y] == 1) {
-                        GameModel.getPlayer2().getField()[x - Field.FIELD2_DISTANCE_FROM_START_COORDINATES][y] = 2;
-                        Ship damagedShip = Ship.getShipByCoordinates(Game.getShipsPlayer2(), new Point(x - Field.FIELD2_DISTANCE_FROM_START_COORDINATES, y)); // поврежденный корабль
+                    if (GameModel.getPlayer2().getField()[x][y] == 1) {
+                        GameModel.getPlayer2().getField()[x][y] = 2;
+                        Ship damagedShip = Ship.getShipByCoordinates(Game.getShipsPlayer2(), new Point(x, y)); // поврежденный корабль
                         if (GameManager.isShipDead(damagedShip, GameModel.getPlayer2())) { // если корабль подбит
                             GameManager.paintAroundDefeatedShip(damagedShip, GameModel.getPlayer2(), Game.getGameStage());
                         }
@@ -44,9 +42,7 @@ public class FieldModel {
                     Game.setGameStage(GameStage.GAME_OVER);
             }
             case TURN_PLAYER2 -> {
-                if (x >= 0 && x < FIELD_SIZE && y >= 0 && y < FIELD_SIZE) {
-                    Controller.toggleSelectedCell(x, y, stage);
-                }
+                Controller.toggleSelectedCell(x, y, stage);
                 try {
                     if (GameModel.getPlayer1().getField()[x][y] == 0)
                         GameManager.ChangePlayer();

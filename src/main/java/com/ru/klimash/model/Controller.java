@@ -2,6 +2,7 @@ package com.ru.klimash.model;
 
 import com.ru.klimash.gui.Field;
 import com.ru.klimash.gui.Game;
+import javafx.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +26,8 @@ public class Controller extends JPanel {
             public void mousePressed(MouseEvent e) {
                 int x = e.getX() / Field.CELL_SIZE;
                 int y = e.getY() / Field.CELL_SIZE;
-                Game.getGameModel().cellPressed(x, y, Game.getGameStage());
+                Game.getGameModel().cellPressed(Field.areCoordinatesCorrect(new Pair<>(x, y), Game.getGameStage()).getKey(),
+                        Field.areCoordinatesCorrect(new Pair<>(x, y), Game.getGameStage()).getValue(), Game.getGameStage());
                 field.repaint();
             }
         });

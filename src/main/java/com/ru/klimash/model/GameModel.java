@@ -24,16 +24,29 @@ public class GameModel {
         }
     }
     public void cellPressed(int x, int y, GameStage stage) {
-        if ((!GameModel.getPlayer2().getExplodedCells().contains(new Point(x - Field.FIELD2_DISTANCE_FROM_START_COORDINATES, y)) &&
-                !GameModel.getPlayer1().getExplodedCells().contains(new Point(x, y))) &&
-                (!Controller.getSelectedCellsPlayer1().contains(new Point(x, y)) &&
-                        !Controller.getSelectedCellsPlayer2().contains(new Point(x, y)))) {
+        if (isNewAction(x, y, stage)) {
             switch (stage) {
                 case TURN_PLAYER1 -> player2.isPressed(x, y, stage);
 
                 case TURN_PLAYER2 -> player1.isPressed(x, y, stage);
             }
         }
+    }
+
+    public boolean isNewAction(int x, int y, GameStage stage) {
+        switch (stage) {
+            case TURN_PLAYER1 -> {
+                if ((!GameModel.getPlayer2().getExplodedCells().contains(new Point(x, y)) &&
+                        !Controller.getSelectedCellsPlayer2().contains(new Point(x, y))))
+                    return true;
+            }
+            case TURN_PLAYER2 -> {
+                if (!GameModel.getPlayer1().getExplodedCells().contains(new Point(x, y)) &&
+                        (!Controller.getSelectedCellsPlayer1().contains(new Point(x, y))))
+                    return true;
+            }
+        }
+        return  false;
     }
 
     public void addExplodedCell(int x, int y, GameStage stage) {
