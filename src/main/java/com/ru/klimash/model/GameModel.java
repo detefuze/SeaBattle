@@ -1,7 +1,5 @@
 package com.ru.klimash.model;
 
-import com.ru.klimash.gui.Field;
-
 import java.awt.*;
 
 public class GameModel {

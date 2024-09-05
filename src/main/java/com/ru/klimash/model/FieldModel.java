@@ -1,6 +1,5 @@
 package com.ru.klimash.model;
 
-import com.ru.klimash.gui.Field;
 import com.ru.klimash.gui.Game;
 
 import java.awt.*;
